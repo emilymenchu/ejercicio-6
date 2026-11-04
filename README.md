@@ -31,65 +31,6 @@ el análisis no especifica un esquema obligatorio. El XML FEL no tiene validez f
 La auditoría describe la acción solicitada y se adjunta a los resultados;
 no se conserva un historial persistente.
 
-## Clases
-
-```mermaid
-classDiagram
-    class IntegracionAPI {
-        <<abstract>>
-        -String identificador
-        -String nombre
-        -String configuracion
-        -boolean activa
-        -boolean conectada
-        -double latenciaPromedio
-        +consultarEstado(String) String
-        +compareTo(IntegracionAPI) int
-    }
-    class Transaccional {
-        <<interface>>
-        +cobrar(double) String
-        +reintegrar(String, double) String
-    }
-    class Documentable {
-        <<interface>>
-        +generarDocumento(String) String
-    }
-    class Auditable {
-        <<interface>>
-        +generarAuditoria(String, String) String
-    }
-    class Comparable~IntegracionAPI~ {
-        <<interface>>
-    }
-    class PasarelaPago {
-        -String medioPago
-    }
-    class ProveedorLogistico {
-        +cotizarEnvio(String, String, double) double
-    }
-    IntegracionAPI ..|> Comparable~IntegracionAPI~
-    IntegracionAPI <|-- PasarelaPago
-    IntegracionAPI <|-- ProveedorLogistico
-    IntegracionAPI <|-- CertificadorFEL
-    Transaccional <|.. PasarelaPago
-    Documentable <|.. ProveedorLogistico
-    Documentable <|.. CertificadorFEL
-    Auditable <|.. PasarelaPago
-    Auditable <|.. ProveedorLogistico
-    Auditable <|.. CertificadorFEL
-    CatalogoIntegraciones o-- "0..*" IntegracionAPI
-    MotorCheckout --> CatalogoIntegraciones
-    Controlador --> CatalogoIntegraciones
-    Controlador --> MotorCheckout
-    Controlador --> VistaGrafica
-    VistaGrafica --> ModeloTablaIntegraciones
-    ModeloTablaIntegraciones --|> DefaultTableModel
-    Main ..> CatalogoIntegraciones
-    Main ..> MotorCheckout
-    Main ..> VistaGrafica
-    Main ..> Controlador
-```
 
 Para agregar un proveedor con las mismas capacidades, registre otra instancia
 de la clase correspondiente. Para cambiar su comportamiento, herede de
